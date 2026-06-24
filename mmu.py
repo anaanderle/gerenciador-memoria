@@ -3,11 +3,6 @@ import threading
 from tabela_paginas import TabelaDePaginas
 from algoritmo_lru import AlgoritmoLRU
 
-# Núcleo do simulador. Responsável por:
-#   1. Manter as tabelas de páginas de todos os processos
-#   2. Traduzir endereço virtual → endereço físico
-#   3. Detectar page faults e coordenar o carregamento de páginas
-#   4. Gerenciar substituição via LRU quando a RAM está cheia
 class MMU:
     def __init__(self, memoria_principal, memoria_virtual):
         self.mem_principal  = memoria_principal
@@ -30,11 +25,6 @@ class MMU:
               f"  | Conteúdo: {conteudo:#04x} ({conteudo})")
 
     def traduzir_e_acessar(self, id_processo, endereco_virtual):
-        """
-          Processo → Endereço Virtual → MMU → (página presente?) →
-            Sim: lê da RAM e mostra conteúdo
-            Não: falta de página → carrega (frame livre ou LRU) → mostra conteúdo
-        """
         with self.lock:
             self.total_acessos += 1
 
@@ -48,11 +38,9 @@ class MMU:
                   f"  →  página {num_pagina}, offset {offset}")
 
             if entrada.presente:
-                # CASO 1: Página já está na memória principal
                 num_frame = entrada.frame
                 self.exibir_resultado(num_frame, offset, num_pagina)
             else:
-                # CASO 2: Page Fault — página não está na RAM
                 self.total_faltas += 1
                 print(f"  [!!] FALTA DE PÁGINA: página {num_pagina} não está na memória principal")
 
@@ -60,23 +48,16 @@ class MMU:
                 self.exibir_resultado(num_frame, offset, num_pagina)
 
     def _carregar_pagina(self, id_processo, num_pagina, tabela):
-        """
-        Trata o carregamento após um page fault:
-          a) Frame livre disponível → usa o primeiro livre
-          b) Sem frame livre → substitui via LRU
-        """
         dados = self.mem_virtual.obter_pagina(id_processo, num_pagina)
 
         frame_livre = self.mem_principal.frame_livre()
 
         if frame_livre != -1:
-            # CASO 2a: Existe frame livre → carrega diretamente
             print(f"       Frame livre encontrado: Frame {frame_livre} → carregando página {num_pagina}")
             self.mem_principal.carregar_pagina(frame_livre, dados, id_processo, num_pagina)
             tabela.atualizar(num_pagina, frame_livre, presente=True)
             return frame_livre
         else:
-            # CASO 2b: Sem frames livres → substituição LRU
             frame_vitima = self.lru.escolher_vitima()
             ocup         = self.mem_principal.ocupacao[frame_vitima]
 

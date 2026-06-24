@@ -1,6 +1,5 @@
 from collections import OrderedDict
 
-# Escolhe a vítima para substituição pelo critério LRU.
 class AlgoritmoLRU:
     def __init__(self):
         self.ordem_uso = OrderedDict()

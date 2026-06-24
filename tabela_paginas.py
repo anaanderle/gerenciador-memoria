@@ -1,6 +1,5 @@
 from entrada_tabela_paginas import EntradaTabelaPaginas
 
-# Mapeia páginas virtuais para frames físicos
 class TabelaDePaginas:
     def __init__(self, num_paginas):
         self.entradas = [EntradaTabelaPaginas() for _ in range(num_paginas)]

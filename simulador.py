@@ -24,14 +24,13 @@ class Simulador:
               f"Tamanho: {tamanho_bytes // 1024} KB | {num_paginas} página(s)")
 
     def executar(self):
-        print("  SIMULADOR DE MEMÓRIA VIRTUAL — UNISINOS 2026")
+        print("  SIMULADOR DE MEMÓRIA VIRTUAL")
         print(f"  Memória Principal : {TAMANHO_MEMORIA_PRINCIPAL//1024} KB "
               f"| {NUM_FRAMES} frames de {TAMANHO_PAGINA//1024} KB cada")
         print(f"  Memória Virtual   : {TAMANHO_MEMORIA_VIRTUAL//1024} KB "
               f"| {NUM_PAGINAS} páginas de {TAMANHO_PAGINA//1024} KB cada")
         print(f"  Substituição      : LRU (Least Recently Used)")
         print(f"  Processos leves   : {len(self.threads)} threads")
-        print("="*55)
 
         for t in self.threads:
             t.start()

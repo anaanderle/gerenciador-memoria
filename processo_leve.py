@@ -13,7 +13,7 @@ class ProcessoLeve(threading.Thread):
         self.num_acessos   = num_acessos
 
     def run(self):
-        print(f"[P{self.id_processo}] Thread iniciada | "
+        print(f"[P{self.id_processo}] Thread iniciada"
               f"Espaço virtual: {self.espaco_virtual // 1024} KB "
               f"({self.espaco_virtual // TAMANHO_PAGINA} página(s))")
         for _ in range(self.num_acessos):

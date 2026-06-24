@@ -1,4 +1,3 @@
-# Representa os 8 frames físicos de 8 KB cada (total 64 KB).
 class MemoriaPrincipal:
     def __init__(self, num_frames, tamanho_frame):
         self.num_frames    = num_frames
